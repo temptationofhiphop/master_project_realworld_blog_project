@@ -13,6 +13,11 @@ import {
 } from '../constants/actionTypes';
 
 export default (state = {}, action) => {
+  // Request failures carry an error payload, not article-list data.
+  if (action.error) {
+    return state;
+  }
+
   switch (action.type) {
     case ARTICLE_FAVORITED:
     case ARTICLE_UNFAVORITED:

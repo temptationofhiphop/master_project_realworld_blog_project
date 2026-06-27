@@ -6,6 +6,10 @@ import {
 } from '../constants/actionTypes';
 
 export default (state = {}, action) => {
+  if (action.error) {
+    return state;
+  }
+
   switch (action.type) {
     case PROFILE_PAGE_LOADED:
       return {

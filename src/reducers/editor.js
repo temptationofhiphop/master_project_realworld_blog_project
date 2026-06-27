@@ -11,6 +11,9 @@ import {
 export default (state = {}, action) => {
   switch (action.type) {
     case EDITOR_PAGE_LOADED:
+      if (action.error) {
+        return state;
+      }
       return {
         ...state,
         articleSlug: action.payload ? action.payload.article.slug : '',

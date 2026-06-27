@@ -37,6 +37,9 @@ export default (state = defaultState, action) => {
     case LOGOUT:
       return { ...state, redirectTo: '/', token: null, currentUser: null };
     case ARTICLE_SUBMITTED:
+      if (action.error) {
+        return state;
+      }
       const redirectUrl = `/article/${action.payload.article.slug}`;
       return { ...state, redirectTo: redirectUrl };
     case SETTINGS_SAVED:
@@ -54,7 +57,7 @@ export default (state = defaultState, action) => {
         currentUser: action.error ? null : action.payload.user
       };
     case DELETE_ARTICLE:
-      return { ...state, redirectTo: '/' };
+      return action.error ? state : { ...state, redirectTo: '/' };
     case ARTICLE_PAGE_UNLOADED:
     case EDITOR_PAGE_UNLOADED:
     case HOME_PAGE_UNLOADED:

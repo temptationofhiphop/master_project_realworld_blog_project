@@ -1,6 +1,10 @@
 import { HOME_PAGE_LOADED, HOME_PAGE_UNLOADED } from '../constants/actionTypes';
 
 export default (state = {}, action) => {
+  if (action.error) {
+    return state;
+  }
+
   switch (action.type) {
     case HOME_PAGE_LOADED:
       return {

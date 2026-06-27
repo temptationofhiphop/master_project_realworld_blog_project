@@ -8,6 +8,9 @@ import {
 export default (state = {}, action) => {
   switch (action.type) {
     case ARTICLE_PAGE_LOADED:
+      if (action.error) {
+        return state;
+      }
       return {
         ...state,
         article: action.payload[0].article,
@@ -24,6 +27,9 @@ export default (state = {}, action) => {
           (state.comments || []).concat([action.payload.comment])
       };
     case DELETE_COMMENT:
+      if (action.error) {
+        return state;
+      }
       const commentId = action.commentId
       return {
         ...state,
