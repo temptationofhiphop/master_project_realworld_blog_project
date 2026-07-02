@@ -2,5 +2,5 @@ projectKey=realworld-react
 serverUrl=http://localhost:9000
 serverVersion=26.6.0.123539
 dashboardUrl=http://localhost:9000/dashboard?id=realworld-react
-ceTaskId=cce491f2-5d1a-4767-be92-fb4442a60988
-ceTaskUrl=http://localhost:9000/api/ce/task?id=cce491f2-5d1a-4767-be92-fb4442a60988
+ceTaskId=6758b334-5179-45e7-9096-1fc387b7cc5b
+ceTaskUrl=http://localhost:9000/api/ce/task?id=6758b334-5179-45e7-9096-1fc387b7cc5b

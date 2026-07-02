@@ -23,26 +23,56 @@ const EditProfileSettings = props => {
   return null;
 };
 
-const FollowUserButton = props => {
-  if (props.isUser) {
-    return null;
-  }
+const loadProfilePage = props => {
+  const username = props.match.params.username;
+  props.onLoad(Promise.all([
+    agent.Profile.get(username),
+    agent.Articles.byAuthor(username)
+  ]));
+};
 
+const unloadProfilePage = props => {
+  props.onUnload();
+};
+
+const isCurrentUserProfile = (currentUser, profile) => currentUser &&
+  profile.username === currentUser.username;
+
+const getFollowButtonClasses = following => {
   let classes = 'btn btn-sm action-btn';
-  if (props.user.following) {
+  if (following) {
     classes += ' btn-secondary';
   } else {
     classes += ' btn-outline-secondary';
   }
 
-  const handleClick = ev => {
-    ev.preventDefault();
-    if (props.user.following) {
-      props.unfollow(props.user.username)
-    } else {
-      props.follow(props.user.username)
-    }
-  };
+  return classes;
+};
+
+const followOrUnfollow = (user, follow, unfollow) => {
+  if (user.following) {
+    unfollow(user.username)
+  } else {
+    follow(user.username)
+  }
+};
+
+const onFollowButtonClick = (user, follow, unfollow) => ev => {
+  ev.preventDefault();
+  followOrUnfollow(user, follow, unfollow);
+};
+
+const FollowUserButton = props => {
+  if (props.isUser) {
+    return null;
+  }
+
+  const classes = getFollowButtonClasses(props.user.following);
+  const handleClick = onFollowButtonClick(
+    props.user,
+    props.follow,
+    props.unfollow
+  );
 
   return (
     <button
@@ -76,14 +106,11 @@ const mapDispatchToProps = dispatch => ({
 
 class Profile extends React.Component {
   componentWillMount() {
-    this.props.onLoad(Promise.all([
-      agent.Profile.get(this.props.match.params.username),
-      agent.Articles.byAuthor(this.props.match.params.username)
-    ]));
+    loadProfilePage(this.props);
   }
 
   componentWillUnmount() {
-    this.props.onUnload();
+    unloadProfilePage(this.props);
   }
 
   renderTabs() {
@@ -114,8 +141,7 @@ class Profile extends React.Component {
       return null;
     }
 
-    const isUser = this.props.currentUser &&
-      this.props.profile.username === this.props.currentUser.username;
+    const isUser = isCurrentUserProfile(this.props.currentUser, profile);
 
     return (
       <div className="profile-page">
